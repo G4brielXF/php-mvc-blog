@@ -9,6 +9,7 @@ class Upload
     public $subDiretorio;
     public $nome;
     public $diretorio;
+    public $tamanho;
     public $resultado;
     public $erro;
 
@@ -31,15 +32,28 @@ class Upload
         return $this->erro;
     }
 
-    public function arquivo(array $arquivo, string $nome = null, string $subDiretorio = null): void
+    public function arquivo(array $arquivo, string $nome = null, string $subDiretorio = null, int $tamanho = null): void
     {
         $this->arquivo = $arquivo;
         $this->nome = $nome ?? pathinfo($arquivo['name'], PATHINFO_FILENAME);
         $this->subDiretorio = $subDiretorio ?? 'arquivos';
+        $this->tamanho = $tamanho ?? 1;
 
-        $this->criarSubDiretorio();
-        $this->renomearArquivo();
-        $this->moverArquivo();
+        $tiposValidos = ['aplication/pdf', 'text/plain'];
+        $extensoesValidas = ['png','txt', 'pdf'];
+        $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
+
+        if(!in_array($extensao, $extensoesValidas)){
+            $this->erro = 'Extensão inválida do arquivo! Apenas: '. implode(',', $extensoesValidas);
+        }elseif(!in_array($arquivo['type'], $tiposValidos )){
+            $this->erro = 'Tipo de arquivo inválido!';
+        }elseif($arquivo['size'] > $this->tamanho*(1024*1024)){
+            $this->erro = "Tamanho do arquivo maior que {$this->tamanho}MB";
+        }else{
+            $this->criarSubDiretorio();
+            $this->renomearArquivo();
+            $this->moverArquivo();
+        }
     }
 
     public function criarSubDiretorio()
@@ -63,7 +77,7 @@ class Upload
         if (move_uploaded_file($this->arquivo['tmp_name'], $this->diretorio . DIRECTORY_SEPARATOR . $this->subDiretorio . DIRECTORY_SEPARATOR . $this->nome)) {
             $this->resultado = $this->nome;
         } else {
-            $this->resultado = null;
+            $this->resultado = null; 
             $this->erro = 'Erro ao enviar arquivo';
         }
     }
