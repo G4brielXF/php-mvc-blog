@@ -12,3 +12,9 @@ if(!empty($arquivo = $_FILES)){
     $arquivo = $_FILES['arquivo'];
     $upload->arquivo($arquivo, 'textos');
 }
+?>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="arquivo"> 
+    <button>Enviar Arquivo</button>
+</form>
