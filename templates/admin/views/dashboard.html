@@ -280,7 +280,7 @@
                                     <i class="fa-solid fa-user me-2"></i>
                                     <span class="fw-bold">{{usuario.nome}}</span>
                                 </p>                              
-                                <small class="text-muted">Há XXX tempo em xx/xx/xx às 00:00</small>
+                                <small class="text-muted">Ultimo login em {{usuario.ultimo_login |date('d/m/Y')}} às {{usuario.ultimo_login |date('H:m')}}</small>
                             </li>
                             {%endfor%}
                         </ul>

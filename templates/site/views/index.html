@@ -13,8 +13,21 @@
                 tooltip="tooltip"
                 title="{{ post.titulo }}"
               >
-                <h4 class="card-title">{{ post.titulo }}</h4>
-
+                <h4 class="card-title">
+                  {{ post.titulo }}
+                  <a
+                    href="{{url('uploads/imagens/'~post.capa)}}"
+                    data-fancybox="gallery"
+                    data-caption="Optional caption"
+                  >
+                    <img
+                      src="{{url('uploads/imagens/'~post.capa)}}"
+                      alt="{{post.titulo}}"
+                      title="{{post.titulo}}"
+                      class="classePequena"
+                    />
+                  </a>
+                </h4>
                 <div class="d-flex justify-content-between my-3 text-muted">
                   <small>{{ post.categorias.titulo | upper }}</small>
                   <small>{{ contarTempo(post.cadastrado_em) }}</small>
